@@ -6,36 +6,21 @@ import { Routes, RouterModule } from '@angular/router';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 
 const routes: Routes =[
-  {
-    path: '',
-    redirectTo: 'dashboard',
-    pathMatch: 'full',
-  }, {
-    path: '',
-    component: AdminLayoutComponent,
-    children: [
-        {
-      path: '',
-      loadChildren: './layouts/admin-layout/admin-layout.module#AdminLayoutModule'
-  }]}
-    // { path: 'dashboard',      component: DashboardComponent },
-    // { path: 'user-profile',   component: UserProfileComponent },
-    // { path: 'table-list',     component: TableListComponent },
-    // { path: 'typography',     component: TypographyComponent },
-    // { path: 'icons',          component: IconsComponent },
-    // { path: 'maps',           component: MapsComponent },
-    // { path: 'notifications',  component: NotificationsComponent },
-    // { path: 'upgrade',        component: UpgradeComponent },
-    // { path: '',               redirectTo: 'dashboard', pathMatch: 'full' }
+    { path: '', redirectTo: 'dashboard', pathMatch: 'full', }, 
+    { path: '', component: AdminLayoutComponent, children: [ 
+        { path: '', loadChildren: './layouts/admin-layout/admin-layout.module#AdminLayoutModule' },
+		{ path: 'profile', loadChildren: './profile/profile.module#ProfileModule' },
+		{ path: 'users', loadChildren: './user/user.module#UserModule' }
+    ]}
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    BrowserModule,
-    RouterModule.forRoot(routes)
-  ],
-  exports: [
-  ],
+  	imports: [
+  	  	CommonModule,
+  	  	BrowserModule,
+  	  	RouterModule.forRoot(routes)
+  	],
+  	exports: [
+  	],
 })
 export class AppRoutingModule { }
