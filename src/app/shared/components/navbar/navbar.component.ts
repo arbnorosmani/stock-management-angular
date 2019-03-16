@@ -3,6 +3,14 @@ import { appRoutes } from '../../navigation/sidebar';
 import {Location, LocationStrategy, PathLocationStrategy} from '@angular/common';
 import { Router } from '@angular/router';
 
+import { Store } from '@ngrx/store';
+import * as AuthActions from '../../../auth/store/auth.actions';
+import { HttpClient } from '@angular/common/http';
+import { takeUntil, map, catchError } from "rxjs/operators";
+import { SharedService } from '../../../shared/services/shared.service';
+import { Observable, Subject } from 'rxjs/index';
+import { environment } from '../../../../environments/environment';
+
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -14,12 +22,34 @@ export class NavbarComponent implements OnInit {
     mobile_menu_visible: any = 0;
     private toggleButton: any;
     private sidebarVisible: boolean;
+    private _unsubscribeAll: Subject<any>;
 
-    constructor(location: Location,  private element: ElementRef, private router: Router) {
+    /**
+     * @constructor
+     *
+     * @param {Location} location
+     * @param {ElementRef} element
+     * @param {Router} router
+     * @param {HttpClient} httpClient
+     * @param {Store} store
+     * @param {SharedService} _sharedService
+     */
+    constructor(
+        location: Location,  
+        private element: ElementRef, 
+        private router: Router,
+        private httpClient: HttpClient,
+        private store: Store<any>,
+        private _sharedService: SharedService
+    ) {
         this.location = location;
         this.sidebarVisible = false;
+        this._unsubscribeAll = new Subject();
     }
 
+     /**
+     * On Init
+     */
     ngOnInit(){
       this.listTitles = appRoutes.filter(listTitle => listTitle);
       const navbar: HTMLElement = this.element.nativeElement;
@@ -122,5 +152,32 @@ export class NavbarComponent implements OnInit {
           }
       }
       return 'Dashboard';
+    }
+
+     /**
+     * Revoke token on logout
+     */
+    onLogOut(){
+
+        // Send request to revoke token
+        this.httpClient.get(environment.apiURL+'/auth/logout')
+        .pipe(
+            takeUntil(this._unsubscribeAll),
+            map (
+                (response) =>{
+                    this.store.dispatch(new AuthActions.Logout());
+                    this.store.dispatch(new AuthActions.SetAuthUser({}));
+                    this.router.navigate(['/login']);
+                    localStorage.removeItem('access_token');
+                }
+            ),
+            catchError(
+                (error) => {
+                    this._sharedService.openSnackBar('There was a problem signing you out.', 'X', 'error', 15000);
+                    return Observable.throw(error);
+                }
+            )
+        )
+        .subscribe();
     }
 }
