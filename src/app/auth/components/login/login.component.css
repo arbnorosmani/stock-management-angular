@@ -1,0 +1,16 @@
+.login{
+    background-color: #1e2835;
+    height: 100vh;
+}
+
+.login mat-card{
+    width: 30%;
+    position: absolute;
+    top: 50px;
+    left: 35%;
+}
+
+.button {
+    display: flex;
+    justify-content: flex-end;
+}

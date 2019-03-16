@@ -4,10 +4,13 @@ import { BrowserModule  } from '@angular/platform-browser';
 import { Routes, RouterModule } from '@angular/router';
 
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
+import { LoginComponent } from './auth/components/login/login.component';
+import { AuthGuard } from './auth/services/auth-guard.service';
 
 const routes: Routes =[
     { path: '', redirectTo: 'dashboard', pathMatch: 'full', }, 
-    { path: '', component: AdminLayoutComponent, children: [ 
+    { path: 'login', component: LoginComponent }, 
+    { path: '', component: AdminLayoutComponent, canActivate: [AuthGuard], children: [ 
 		{ path: '', loadChildren: './layouts/admin-layout/admin-layout.module#AdminLayoutModule' },
 		{ path: 'products', loadChildren: './product/product.module#ProductModule' },
 		{ path: 'brands', loadChildren: './brand/brand.module#BrandModule' },
