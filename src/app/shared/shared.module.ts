@@ -28,6 +28,7 @@ import {
 
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 @NgModule({
     imports: [
@@ -50,6 +51,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
         MatMenuModule,
         MatIconModule,
         MatDialogModule,
+        MatProgressBarModule,
 
         FormsModule,   
         ReactiveFormsModule 
@@ -79,6 +81,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
         MatMenuModule,
         MatIconModule,
         MatDialogModule,
+        MatProgressBarModule,
 
         FormsModule,   
         ReactiveFormsModule 

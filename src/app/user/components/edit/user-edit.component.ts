@@ -10,6 +10,9 @@ import { SharedService } from '../../../shared/services/shared.service';
 import { environment } from '../../../../environments/environment';
 import { Router, ActivatedRoute } from '@angular/router';
 
+import { Store } from '@ngrx/store';
+import * as SharedActions from '../../../shared/store/shared.actions';
+
 @Component({
   selector: 'user-edit',
   templateUrl: './user-edit.component.html',
@@ -30,6 +33,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
      * @param {SharedService} _sharedService
      * @param {Router} router
      * @param {ActivatedRoute} route
+     * @param {Store} store
      */
     constructor(
         private httpClient: HttpClient,
@@ -37,7 +41,8 @@ export class UserEditComponent implements OnInit, OnDestroy {
         private _titleService: Title,
         private _sharedService: SharedService,
         private router: Router,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private store: Store<any>
     )
     {
         this._titleService.setTitle( 'Profile' );
@@ -107,6 +112,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
      */
     onSubmit(){
         if(this.userForm.valid){
+            this.store.dispatch(new SharedActions.SetIsLoading(true));
             let data = this.userForm.value;
             data.id = this.id;
 
@@ -122,11 +128,14 @@ export class UserEditComponent implements OnInit, OnDestroy {
                                 let errors = response['errors'];
                                 this._sharedService.openSnackBar(errors[Object.keys(errors)[0]], 'X', 'error', 15000);
                             }
+                            this.store.dispatch(new SharedActions.SetIsLoading(false));
                         }
                     ),
                     catchError(
                         (error) => {
                             this._sharedService.openSnackBar('There was a problem while adding this user.', 'X', 'error', 15000);
+                            this.store.dispatch(new SharedActions.SetIsLoading(false));
+
                             return Observable.throw(error);
                         }
                     )

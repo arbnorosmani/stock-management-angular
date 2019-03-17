@@ -5,6 +5,8 @@ import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import PerfectScrollbar from 'perfect-scrollbar';
 
+import { Store } from '@ngrx/store';
+
 @Component({
   selector: 'app-admin-layout',
   templateUrl: './admin-layout.component.html',
@@ -14,8 +16,9 @@ export class AdminLayoutComponent implements OnInit {
   private _router: Subscription;
   private lastPoppedUrl: string;
   private yScrollStack: number[] = [];
+  isLoading: boolean = false;
 
-  constructor( public location: Location, private router: Router) {}
+  constructor( public location: Location, private router: Router, private store: Store<any>) {}
 
   ngOnInit() {
       const isWindows = navigator.platform.indexOf('Win') > -1 ? true : false;
@@ -53,6 +56,15 @@ export class AdminLayoutComponent implements OnInit {
           let ps = new PerfectScrollbar(elemMainPanel);
           ps = new PerfectScrollbar(elemSidebar);
       }
+
+
+      // Get isLoading from ngRx store
+      this.store.select(state => state)
+        .subscribe(
+            (data) => {
+                this.isLoading = data['shared']['isLoading'];
+            }
+        );
   }
   ngAfterViewInit() {
       this.runOnRouteChange();

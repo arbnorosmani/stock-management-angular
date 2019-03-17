@@ -10,6 +10,9 @@ import { SharedService } from '../../../shared/services/shared.service';
 import { environment } from '../../../../environments/environment';
 import { Router } from '@angular/router';
 
+import { Store } from '@ngrx/store';
+import * as SharedActions from '../../../shared/store/shared.actions';
+
 @Component({
   selector: 'user-create',
   templateUrl: './user-create.component.html',
@@ -28,13 +31,15 @@ export class UserCreateComponent implements OnInit, OnDestroy {
      * @param {Title} _titleService
      * @param {SharedService} _sharedService
      * @param {Router} router
+     * @param {Store} store
      */
     constructor(
         private httpClient: HttpClient,
         private _formBuilder: FormBuilder,
         private _titleService: Title,
         private _sharedService: SharedService,
-        private router: Router
+        private router: Router,
+        private store: Store<any>
     )
     {
         this._titleService.setTitle( 'Profile' );
@@ -71,6 +76,7 @@ export class UserCreateComponent implements OnInit, OnDestroy {
     onSubmit(){
         if(this.userForm.valid){
             let data = this.userForm.value;
+            this.store.dispatch(new SharedActions.SetIsLoading(true));
 
             // Send request to store user
             this.httpClient.post(environment.apiURL+'/users/store', data)
@@ -85,11 +91,14 @@ export class UserCreateComponent implements OnInit, OnDestroy {
                                 let errors = response['errors'];
                                 this._sharedService.openSnackBar(errors[Object.keys(errors)[0]], 'X', 'error', 15000);
                             }
+                            this.store.dispatch(new SharedActions.SetIsLoading(false));
                         }
                     ),
                     catchError(
                         (error) => {
                             this._sharedService.openSnackBar('There was a problem while adding this user.', 'X', 'error', 15000);
+                            this.store.dispatch(new SharedActions.SetIsLoading(false));
+
                             return Observable.throw(error);
                         }
                     )

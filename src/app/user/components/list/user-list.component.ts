@@ -15,6 +15,9 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import { DialogComponent } from '../../../shared/components/dialog/dialog.component';
 
+import { Store } from '@ngrx/store';
+import * as SharedActions from '../../../shared/store/shared.actions';
+
 @Component({
   selector: 'user-list',
   templateUrl: './user-list.component.html',
@@ -40,6 +43,7 @@ export class UserListComponent implements OnInit {
      * @param {ActivatedRoute} route
      * @param {RouteParamsService} _routeParamsService
      * @param {MatDialog} dialog
+     * @param {Store} store
      */
     constructor(
         private httpClient: HttpClient,
@@ -48,7 +52,8 @@ export class UserListComponent implements OnInit {
         private router: Router,
         private route: ActivatedRoute,
         private _routeParamsService: RouteParamsService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private store: Store<any>
     ){}
 
     /**
@@ -192,6 +197,7 @@ export class UserListComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             if(result == 'confirm'){
+                this.store.dispatch(new SharedActions.SetIsLoading(true));
 
                 // Send request to delet user
                 this.httpClient.delete(environment.apiURL+'/users/delete/'+id)
@@ -205,10 +211,12 @@ export class UserListComponent implements OnInit {
                                     this.dataSource = new MatTableDataSource<any>(newData);
                                     this._sharedService.openSnackBar('User deleted successfully', 'X', 'success');
                                 }
+                                this.store.dispatch(new SharedActions.SetIsLoading(false));
                             }
                         ),
                         catchError((error) => {
                             this._sharedService.openSnackBar('User not deleted', 'X', 'error', 15000);
+                            this.store.dispatch(new SharedActions.SetIsLoading(false));
         
                             return Observable.throw(error);
                         })
@@ -233,6 +241,7 @@ export class UserListComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             if(result == 'confirm'){
+                this.store.dispatch(new SharedActions.SetIsLoading(true));
 
                 let selectedData = this.selection.selected;
                 var keyArray = selectedData.map(function(item) { return item["id"]; });
@@ -252,10 +261,12 @@ export class UserListComponent implements OnInit {
 
                                     this._sharedService.openSnackBar('Users deleted successfully', 'X', 'success');
                                 }
+                                this.store.dispatch(new SharedActions.SetIsLoading(false));
                             }
                         ),
                         catchError((error) => {
                             this._sharedService.openSnackBar('Users not deleted', 'X', 'error', 15000);
+                            this.store.dispatch(new SharedActions.SetIsLoading(false));
         
                             return Observable.throw(error);
                         })

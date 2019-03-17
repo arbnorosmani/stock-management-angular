@@ -10,6 +10,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { environment } from "../../../environments/environment";
 import * as AuthActions from '../store/auth.actions';
+import * as SettingsActions from '../../settings/store/settings.actions';
 
 @Injectable()
 export class AuthGuard implements CanActivate{
@@ -35,7 +36,6 @@ export class AuthGuard implements CanActivate{
 
     /**
      * Check if user has access to activate route
-     * By implementing this guard, all route permission are denied unless user is authenticated.
      *
      * @param {ActivatedRouteSnapshot} route
      * @param {RouterStateSnapshot} state
@@ -71,6 +71,7 @@ export class AuthGuard implements CanActivate{
                         }else{
                             this.store.dispatch(new AuthActions.Signin(localStorage.getItem('access_token')));
                             this.store.dispatch(new AuthActions.SetAuthUser(response['user']));
+                            this.store.dispatch(new SettingsActions.SetSettingsData(response['settings']));
                             return true;
                         }
                     }

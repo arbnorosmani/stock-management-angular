@@ -10,6 +10,10 @@ import { SharedService } from '../../../shared/services/shared.service';
 import { environment } from '../../../../environments/environment';
 import { currencies as availableCurrencies } from '../../../shared/currencies';
 
+import { Store } from '@ngrx/store';
+import * as SettingsActions from '../../store/settings.actions';
+import * as SharedActions from '../../../shared/store/shared.actions';
+
 @Component({
   selector: 'settings',
   templateUrl: './settings.component.html',
@@ -33,12 +37,14 @@ export class SettingsComponent implements OnInit {
      * @param {FormBuilder} _formBuilder
      * @param {Title} _titleService
      * @param {SharedService} _sharedService
+     * @param {Store} store
      */
     constructor(
         private httpClient: HttpClient,
         private _formBuilder: FormBuilder,
         private _titleService: Title,
-        private _sharedService: SharedService
+        private _sharedService: SharedService,
+        private store: Store<any>
     )
     {
         this._titleService.setTitle( 'Settings' );
@@ -52,33 +58,23 @@ export class SettingsComponent implements OnInit {
         this.currencies = availableCurrencies;
 
         this.settingsForm = this._formBuilder.group({
-            siteTitle : ['', [ Validators.required] ],
+            site_title : ['', [ Validators.required] ],
             currency : [''],
-            currencyPosition : [''],
+            currency_position : [''],
         });   
         
-        // Send request to get settings
-        this.httpClient.get(environment.apiURL+'/settings')
-            .pipe(
-                takeUntil(this._unsubscribeAll),
-                map(
-                    (response) => {
-                        let data = response['settings'];
-
-                        this.settingsForm.patchValue({
-                            siteTitle: data['site_title'],
-                            currency: data['currency'],
-                            currencyPosition: data['currency_position']
-                        });
-                    }
-                ),
-                catchError((error) => {
-                    this._sharedService.openSnackBar('There was a problem loading settings data', 'X', 'error', 15000);
-
-                    return Observable.throw(error);
-                })
-            )
-            .subscribe();
+        this.store.select(state => state)
+            .subscribe(
+                (data) => {
+                    console.log(data['settings']['data']);
+                    let settingsData = data['settings']['data'];
+                    this.settingsForm.patchValue({
+                        site_title: settingsData['site_title'],
+                        currency: settingsData['currency'],
+                        currency_position: settingsData['currency_position']
+                    });
+                }
+            );
     }
 
     /**
@@ -86,29 +82,33 @@ export class SettingsComponent implements OnInit {
     */
     onSubmit(){
         if(this.settingsForm.valid){
+            this.store.dispatch(new SharedActions.SetIsLoading(true));
             let data = this.settingsForm.value;
 
            // Send request to update settings
-           this.httpClient.post(environment.apiURL+'/settings/update', data)
-           .pipe(
-               takeUntil(this._unsubscribeAll),
-               map (
-                   (response) =>{
-                        if(response['success']){
-                            this._sharedService.openSnackBar('Settings updated successfully.', 'X', 'success');
-                        }else{
-                            this._sharedService.openSnackBar('Settings not updated.', 'X', 'error', 10000);
+            this.httpClient.post(environment.apiURL+'/settings/update', data)
+                .pipe(
+                    takeUntil(this._unsubscribeAll),
+                    map (
+                        (response) =>{
+                            if(response['success']){
+                                this._sharedService.openSnackBar('Settings updated successfully.', 'X', 'success');
+                                this.store.dispatch(new SettingsActions.SetSettingsData(this.settingsForm.value));
+                            }else{
+                                this._sharedService.openSnackBar('Settings not updated.', 'X', 'error', 10000);
+                            }
+                            this.store.dispatch(new SharedActions.SetIsLoading(false));
                         }
-                   }
-               ),
-               catchError(
-                   (error) => {
-                       this._sharedService.openSnackBar('Settings not updated.', 'X', 'error', 15000);
-                       return Observable.throw(error);
-                   }
-               )
-           )
-           .subscribe();
+                    ),
+                    catchError(
+                        (error) => {
+                            this._sharedService.openSnackBar('Settings not updated.', 'X', 'error', 15000);
+                            this.store.dispatch(new SharedActions.SetIsLoading(false));
+                            return Observable.throw(error);
+                        }
+                    )
+                )
+                .subscribe();
         }
     }
 
