@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { FooterComponent } from './components/footer/footer.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { DialogComponent } from './components/dialog/dialog.component';
 
 import { MatDialogModule } from '@angular/material/dialog';
 import {
@@ -85,7 +86,11 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     declarations: [
         FooterComponent,
         NavbarComponent,
-        SidebarComponent
+        SidebarComponent,
+        DialogComponent
+    ],
+    entryComponents: [
+        DialogComponent
     ]
 })
 

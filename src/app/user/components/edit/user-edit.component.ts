@@ -8,17 +8,18 @@ import { Subject, Observable } from 'rxjs/index';
 import { takeUntil, map, catchError } from "rxjs/operators";
 import { SharedService } from '../../../shared/services/shared.service';
 import { environment } from '../../../../environments/environment';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'user-create',
-  templateUrl: './user-create.component.html',
-  styleUrls: ['./user-create.component.css']
+  selector: 'user-edit',
+  templateUrl: './user-edit.component.html',
+  styleUrls: ['./user-edit.component.css']
 })
-export class UserCreateComponent implements OnInit, OnDestroy {
+export class UserEditComponent implements OnInit, OnDestroy {
 
     userForm: FormGroup;
     private _unsubscribeAll: Subject<any>;
+    id: number;
  
     /**
      * @constructor
@@ -28,13 +29,15 @@ export class UserCreateComponent implements OnInit, OnDestroy {
      * @param {Title} _titleService
      * @param {SharedService} _sharedService
      * @param {Router} router
+     * @param {ActivatedRoute} route
      */
     constructor(
         private httpClient: HttpClient,
         private _formBuilder: FormBuilder,
         private _titleService: Title,
         private _sharedService: SharedService,
-        private router: Router
+        private router: Router,
+        private route: ActivatedRoute
     )
     {
         this._titleService.setTitle( 'Profile' );
@@ -45,6 +48,8 @@ export class UserCreateComponent implements OnInit, OnDestroy {
      * On init
      */
     ngOnInit() {
+        this.id = this.route.snapshot.params['id'];
+
         this.userForm = this._formBuilder.group({
             name : ['', Validators.required],
             email : ['', [ Validators.required, Validators.email] ],
@@ -52,9 +57,41 @@ export class UserCreateComponent implements OnInit, OnDestroy {
             city : [''],
             phone : [''],
             address : [''],
-            password: ['', [Validators.required, Validators.minLength(6)]],
-            password_confirmation: ['', [Validators.required, Validators.minLength(6), confirmPasswordValidator] ]
+            // password: ['', [Validators.required, Validators.minLength(6)]],
+            // password_confirmation: ['', [Validators.required, Validators.minLength(6), confirmPasswordValidator] ]
         }); 
+
+        
+        // Send request to get user by id
+        this.httpClient.get(environment.apiURL+'/users/'+this.id)
+        .pipe(
+            takeUntil(this._unsubscribeAll),
+            map (
+                (response) =>{
+                    if(response['success']){
+                        let user = response['user'];
+
+                        this.userForm.patchValue({
+                            name : user['name'],
+                            email : user['email'],
+                            country : user['country'],
+                            city : user['city'],
+                            phone : user['phone'],
+                            address : user['address'],
+                        });
+                    }else{
+                        this._sharedService.openSnackBar('There was a problem loading user data.', 'X', 'error', 15000);
+                    }
+                }
+            ),
+            catchError(
+                (error) => {
+                    this._sharedService.openSnackBar('There was a problem while updating this user.', 'X', 'error', 15000);
+                    return Observable.throw(error);
+                }
+            )
+        )
+        .subscribe();
     }
 
     /**
@@ -71,16 +108,16 @@ export class UserCreateComponent implements OnInit, OnDestroy {
     onSubmit(){
         if(this.userForm.valid){
             let data = this.userForm.value;
+            data.id = this.id;
 
-            // Send request to store user
-            this.httpClient.post(environment.apiURL+'/users/store', data)
+            // Send request to update user
+            this.httpClient.post(environment.apiURL+'/users/update', data)
                 .pipe(
                     takeUntil(this._unsubscribeAll),
                     map (
                         (response) =>{
                             if(response['success']){
-                                this._sharedService.openSnackBar('User stored successfully.', 'X', 'success');
-                                this.router.navigate(['users']);
+                                this._sharedService.openSnackBar('User updated successfully.', 'X', 'success');
                             }else{
                                 let errors = response['errors'];
                                 this._sharedService.openSnackBar(errors[Object.keys(errors)[0]], 'X', 'error', 15000);
