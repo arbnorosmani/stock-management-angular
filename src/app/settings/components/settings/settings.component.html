@@ -1,5 +1,50 @@
 <div class="main-content">
-  <div class="container-fluid">
-      Settings
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Settings</h4>
+                    </div>
+                    <div class="card-body">
+                        <form name="settingsForm" [formGroup]="settingsForm" (ngSubmit)="onSubmit()">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                          <mat-label>Site Title</mat-label>
+                                          <input matInput formControlName="siteTitle" required>
+                                          <mat-error>Site Title is required!</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <mat-form-field>
+                                        <mat-select placeholder="Currency" formControlName="currency">
+                                            <mat-option *ngFor="let currency of currencies" [value]="currency.key">
+                                                {{currency.value}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <mat-form-field>
+                                        <mat-select placeholder="Currency Position" formControlName="currencyPosition">
+                                            <mat-option *ngFor="let position of currencyPositions" [value]="position.key">
+                                                {{position.value}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <button mat-raised-button type="submit" class="btn btn-info pull-right">Save</button>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
   </div>
-</div>
+  
