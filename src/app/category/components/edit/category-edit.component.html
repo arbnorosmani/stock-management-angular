@@ -1,0 +1,43 @@
+<div class="main-content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-8 offset-md-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Edit Category</h4>
+                        </div>
+                        <div class="card-body">
+                            <form name="categoryForm" [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <mat-form-field class="example-full-width">
+                                              <mat-label>Name</mat-label>
+                                              <input matInput formControlName="name" required (blur)="generateSlug()">
+                                              <mat-error>Name is required!</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <mat-form-field class="example-full-width">
+                                              <input matInput placeholder="Slug" type="text" formControlName="slug" required disabled>
+                                              <mat-error>Slug is required!</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput placeholder="Code" formControlName="code" type="text">
+                                            <mat-error>Code is required!</mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <button mat-raised-button type="submit" class="btn btn-info pull-right">Save</button>
+                                <div class="clearfix"></div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+      
