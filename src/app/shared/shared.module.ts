@@ -29,6 +29,8 @@ import {
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 @NgModule({
     imports: [
@@ -52,13 +54,15 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
         MatIconModule,
         MatDialogModule,
         MatProgressBarModule,
+        MatChipsModule,
+        MatAutocompleteModule,
 
-        FormsModule,   
-        ReactiveFormsModule 
+        FormsModule,
+        ReactiveFormsModule
     ],
     exports: [
         CommonModule,
-        
+
         //Components
         FooterComponent,
         NavbarComponent,
@@ -82,9 +86,11 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
         MatIconModule,
         MatDialogModule,
         MatProgressBarModule,
+        MatChipsModule,
+        MatAutocompleteModule,
 
-        FormsModule,   
-        ReactiveFormsModule 
+        FormsModule,
+        ReactiveFormsModule
     ],
     declarations: [
         FooterComponent,

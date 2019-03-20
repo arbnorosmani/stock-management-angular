@@ -21,24 +21,24 @@
                                     <mat-checkbox (change)="$event ? masterToggle() : null"
                                                   [checked]="selection.hasValue() && isAllSelected()"
                                                   [indeterminate]="selection.hasValue() && !isAllSelected()"
-                                                  class="accio-checkbox">
+                                                   >
                                     </mat-checkbox>
                                 </th>
                                 <td mat-cell *matCellDef="let row"  >
                                     <mat-checkbox (click)="$event.stopPropagation()"
                                                   (change)="$event ? selection.toggle(row) : null"
                                                   [checked]="selection.isSelected(row)"
-                                                  class="accio-checkbox">
-                                    </mat-checkbox>  
+                                                   >
+                                    </mat-checkbox>
                                 </td>
                             </ng-container>
-        
+
                             <!-- Position Column -->
                             <ng-container matColumnDef="id">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear='true'> ID </th>
                                 <td mat-cell *matCellDef="let element" class="table-small-column"> {{element.id}} </td>
                             </ng-container>
-        
+
                             <!-- Avatar Column -->
                           <ng-container matColumnDef="photo">
                             <th mat-header-cell *matHeaderCellDef disableClear='true'> </th>
@@ -47,7 +47,7 @@
                                    [src]="'https://www.gravatar.com/avatar/735e8111b5c0fd9284b42075ef33b193.jpg?s=200&d=mm'"/>
                             </td>
                           </ng-container>
-        
+
                             <!-- Position Column -->
                             <ng-container matColumnDef="name" >
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear='true' > Name </th>
@@ -55,23 +55,23 @@
                                     <a [routerLink]="'/users/edit/'+element.id" class="item-list-link">{{element.name}}</a>
                                 </td>
                             </ng-container>
-        
+
                             <!-- Email Column &ndasjh;&gt; -->
                             <ng-container matColumnDef="email">
                                 <th mat-header-cell *matHeaderCellDef  mat-sort-header disableClear='true' > Email </th>
                                 <td mat-cell *matCellDef="let element"> {{element.email}} </td>
                             </ng-container>
-        
+
                             <!-- Weight Column -->
                             <ng-container matColumnDef="phone">
                                 <th mat-header-cell *matHeaderCellDef  mat-sort-header disableClear='true' > Phone </th>
                                 <td mat-cell *matCellDef="let element"> {{element.phone}} </td>
                             </ng-container>
-        
+
                             <!-- Buttons Column -->
                             <ng-container matColumnDef="buttons">
                                 <th mat-header-cell *matHeaderCellDef class="actions-column">Actions</th>
-        
+
                                 <td mat-cell *matCellDef="let element; let i = index" class="actions-column-btn">
                                     <button mat-button [matMenuTriggerFor]="menu">
                                         <mat-icon class="secondary-text">more_vert</mat-icon>
@@ -82,13 +82,13 @@
                                     </mat-menu>
                                 </td>
                             </ng-container>
-        
+
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'selected' : selection.isSelected(row)}"></tr>
-        
+
                         </table>
-        
-        
+
+
                         <mat-paginator [length]="totalSize"
                                     [pageSize]="pageSize"
                                     (page)="onPageChange($event)"
@@ -97,7 +97,7 @@
                         </mat-paginator>
                   </div>
               </div>
-              
+
           </div>
       </div>
   </div>

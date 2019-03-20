@@ -19,7 +19,7 @@ export class DialogComponent {
     /**
      * @constructor
      *
-     * @param {MatDialogRef<AccioDialogComponent>} dialogRef
+     * @param {MatDialogRef<DialogComponent>} dialogRef
      * @param {object} data
      */
     constructor(

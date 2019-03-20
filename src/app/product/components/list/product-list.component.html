@@ -20,15 +20,13 @@
                                 <th mat-header-cell *matHeaderCellDef>
                                     <mat-checkbox (change)="$event ? masterToggle() : null"
                                                   [checked]="selection.hasValue() && isAllSelected()"
-                                                  [indeterminate]="selection.hasValue() && !isAllSelected()"
-                                                  class="accio-checkbox">
+                                                  [indeterminate]="selection.hasValue() && !isAllSelected()">
                                     </mat-checkbox>
                                 </th>
                                 <td mat-cell *matCellDef="let row"  >
                                     <mat-checkbox (click)="$event.stopPropagation()"
                                                   (change)="$event ? selection.toggle(row) : null"
-                                                  [checked]="selection.isSelected(row)"
-                                                  class="accio-checkbox">
+                                                  [checked]="selection.isSelected(row)">
                                     </mat-checkbox>
                                 </td>
                             </ng-container>
@@ -58,7 +56,9 @@
                             <!-- Brand Column -->
                             <ng-container matColumnDef="brand">
                                 <th mat-header-cell *matHeaderCellDef  mat-sort-header disableClear='true' > Brand </th>
-                                <td mat-cell *matCellDef="let element"> {{element.brand.name}} </td>
+                                <td mat-cell *matCellDef="let element">
+                                    <a [routerLink]="'/brands/edit/'+element.brand.id" class="item-list-link">{{element.brand.name}}</a> 
+                                </td>
                             </ng-container>
 
                             <!-- Price Column -->

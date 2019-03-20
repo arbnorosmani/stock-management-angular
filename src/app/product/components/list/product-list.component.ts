@@ -152,7 +152,7 @@ export class ProductListComponent implements OnInit {
 
 
     /**
-    * If a user clicks on next ,prev or size we send a request to get all users and redraw the table based on the users criteria
+    * If a user clicks on next ,prev or size we send a request to get all products and redraw the table based on the users criteria
     *
     * @param event
     * */
@@ -276,10 +276,18 @@ export class ProductListComponent implements OnInit {
         });
     }
 
+    /**
+    * Redirect to create page of products
+    */
     addNew(){
         this.router.navigate(['create'], { relativeTo: this.route });
     }
 
+    /**
+    * Redirect to edit page of selected product
+    *
+    * @param {number} id
+    */
     edit(id){
         this.router.navigate(['edit/'+id], { relativeTo: this.route });
     }
