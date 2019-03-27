@@ -1,0 +1,108 @@
+<div class="main-content">
+  <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                  <div class="card-header card-header-warning card-header-icon">
+                        <div class="card-icon">
+                          <i class="material-icons">shopping_cart</i>
+                        </div>
+                        <p class="card-category">Products</p>
+                        <h3 class="card-title">{{ countProducts }}</h3>
+                  </div>
+                  <div class="card-footer">
+                      <div class="stats">
+                          <i class="material-icons">link</i>
+                          <a [routerLink]="'/products'">
+                            See Products
+                          </a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                  <div class="card-header card-header-success card-header-icon">
+                      <div class="card-icon">
+                          <i class="material-icons">branding_watermark</i>
+                      </div>
+                      <p class="card-category">Brands</p>
+                      <h3 class="card-title">{{ countBrands }}</h3>
+                  </div>
+                  <div class="card-footer">
+                      <div class="stats">
+                          <i class="material-icons">link</i>
+                          <a [routerLink]="'/brands'">
+                            See Brands
+                          </a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                  <div class="card-header card-header-danger card-header-icon">
+                      <div class="card-icon">
+                          <i class="material-icons">category</i>
+                      </div>
+                      <p class="card-category">Categories</p>
+                      <h3 class="card-title">{{ countCategories }}</h3>
+                  </div>
+                  <div class="card-footer">
+                      <div class="stats">
+                          <i class="material-icons">link</i>
+                          <a [routerLink]="'/categories'">
+                            See Categories
+                          </a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                  <div class="card-header card-header-info card-header-icon">
+                      <div class="card-icon">
+                          <i class="material-icons">supervisor_account</i>
+                      </div>
+                      <p class="card-category">Users</p>
+                      <h3 class="card-title">{{ countUsers }}</h3>
+                  </div>
+                  <div class="card-footer">
+                      <div class="stats">
+                          <i class="material-icons">link</i>
+                          <a [routerLink]="'/users'">
+                            See Users
+                          </a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <google-chart
+                    [title]="datesChart.title"
+                    [type]="datesChart.type"
+                    [data]="datesChart.data"
+                    [columnNames]="datesChart.columnNames"
+                    [options]="datesChart.options"
+                    style="width: 100%; height: 400px">
+                </google-chart>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <google-chart
+                    [title]="productChart.title"
+                    [type]="productChart.type"
+                    [data]="productChart.data"
+                    [columnNames]="productChart.columnNames"
+                    [options]="productChart.options"
+                    style="width: 100%; height: 400px;margin-top:30px;">
+                </google-chart>
+            </div>
+        </div>
+  </div>
+</div>

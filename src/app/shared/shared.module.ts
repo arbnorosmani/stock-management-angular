@@ -8,6 +8,9 @@ import { FooterComponent } from './components/footer/footer.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { DialogComponent } from './components/dialog/dialog.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+
+import { GoogleChartsModule } from 'angular-google-charts';
 
 import { MatDialogModule } from '@angular/material/dialog';
 import {
@@ -58,7 +61,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
         MatAutocompleteModule,
 
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        GoogleChartsModule.forRoot()
     ],
     exports: [
         CommonModule,
@@ -96,7 +100,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
         FooterComponent,
         NavbarComponent,
         SidebarComponent,
-        DialogComponent
+        DialogComponent,
+        DashboardComponent
     ],
     entryComponents: [
         DialogComponent

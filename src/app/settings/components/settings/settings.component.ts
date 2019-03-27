@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 
 import { Subject, Observable } from 'rxjs/index';
-import { takeUntil, map, catchError } from "rxjs/operators";
+import { takeUntil, map, catchError, take } from "rxjs/operators";
 import { SharedService } from '../../../shared/services/shared.service';
 import { environment } from '../../../../environments/environment';
 import { currencies as availableCurrencies } from '../../../shared/currencies';
@@ -61,20 +61,21 @@ export class SettingsComponent implements OnInit {
             site_title : ['', [ Validators.required] ],
             currency : [''],
             currency_position : [''],
-        });   
-        
+        });
+
         this.store.select(state => state)
-            .subscribe(
-                (data) => {
-                    console.log(data['settings']['data']);
+            .pipe(
+                take(1),
+                map((data) => {
                     let settingsData = data['settings']['data'];
                     this.settingsForm.patchValue({
                         site_title: settingsData['site_title'],
                         currency: settingsData['currency'],
                         currency_position: settingsData['currency_position']
                     });
-                }
-            );
+                })
+            )
+            .subscribe();
     }
 
     /**

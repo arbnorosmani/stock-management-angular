@@ -21,7 +21,7 @@ import { environment } from '../environments/environment';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth/services/auth.interceptor';
 import { AuthGuard } from './auth/services/auth-guard.service';
- 
+
 @NgModule({
   	imports: [
       	SharedModule,
@@ -32,9 +32,9 @@ import { AuthGuard } from './auth/services/auth-guard.service';
         RouterModule,
         HttpClientModule,
 		AppRoutingModule,
-				
+
 		StoreModule.forRoot(appReducer),
-        !environment.production ? StoreDevtoolsModule.instrument() : []
+        !environment.production ? StoreDevtoolsModule.instrument() : [],
   	],
   	declarations: [
     	AppComponent,
@@ -44,7 +44,7 @@ import { AuthGuard } from './auth/services/auth-guard.service';
   	providers: [
         AuthGuard,
         {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
-    ], 
+    ],
   	bootstrap: [AppComponent]
 })
 export class AppModule { }
